@@ -26,7 +26,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Register
 Route::post('/register', [AuthController::class, 'register']);
+// Login
+Route::post('/login', [AuthController::class, 'login']);
 
 /*
  * Protected Routes
  */
+

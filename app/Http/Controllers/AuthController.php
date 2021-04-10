@@ -43,4 +43,27 @@ class AuthController extends Controller
 
         return response()->json($response);
     }
+
+    // Login
+    public function login (Request $request)
+    {
+        $fields = $request->validate([
+            'email' => 'string|required',
+            'password' => 'string|required',
+        ]);
+
+        $user = User::where('email', $fields['email'])->first();
+
+        if(!$user || Hash::check($fields['password'], $user->password)){
+            return response()->json(['message' => 'wrong credentials'], 401 );
+        }
+
+        $token = $user->createToken(config('app.key'))->plainTextToken;
+
+        $response = new \stdClass();
+        $response->user = $user;
+        $response->token = $token;
+
+        return response()->json($response, 200);
+    }
 }
